@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="MAIN" Id="{4be5ac23-0013-4fc6-9f0e-49c338de098e}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	LibrariesAndReusableCode :LibrariesAndReusableCode; 
+	pou : pou; 
+CurrentState : INT; 
+Lamp : BOOL; 
+variable : BOOL ; 
+Elevator : Elevator ; 
+PackagingLine :PackagingLine; 
+    MainRoad    : FB_TrafficLight;
+    SideStreet  : FB_TrafficLight;
+	TankfillingSystem:TankfillingSystem; 
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[ IF CurrentState = 0 THEN 
+	Lamp := FALSE; 
+ELSIF CurrentState = 1 THEN 
+	Lamp := TRUE; 
+ELSIF CurrentState = 2 THEN 
+	//blink lamp
+END_IF
+
+IF variable THEN 
+	currentstate := currentstate +1 ; 
+	ELSE currentstate := currentstate - 1; 
+END_IF
+
+Elevator(); 
+
+POU(); 
+LibrariesAndReusableCode(Number := -5);
+
+// Main Road Code Implementation
+
+
+// Side Street Code Implementation
+
+
+
+// Traffic Light Code Implementation
+
+// Main road: long green
+MainRoad(
+    tRedTime    := T#5s,
+    tYellowTime := T#2s,
+    tGreenTime  := T#10S
+);
+
+// Side street: short green
+SideStreet(
+    tRedTime    := T#10s,
+    tYellowTime := T#2s,
+    tGreenTime  := T#5S
+);
+
+
+PackagingLine(); 
+TankfillingSystem(); ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

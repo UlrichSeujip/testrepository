@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="Namingconventions" Id="{5b68d193-2cee-46f0-a17a-3737cf739c3c}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Namingconventions
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+    bStartButton : BOOL;
+    iCycleCount  : INT;
+    rTargetSpeed : REAL;
+	
+	
+END_VAR
+
+VAR
+	
+	x1                :REAL; 
+	
+	y2                    : REAL; 
+	
+	temp                 : REAL; 
+	
+	CalculateAverageSensorValue                  : ton;  
+	
+	ConvertFahrenheitTemperatureToCelsius              :Ton; 
+	
+	LogProductionDataToDatabase             : ton; 
+	             iMotorSpeed, rTemperatureSetpoint : REAL; 
+				 
+				 rTemperatureInCelsius : REAL; 
+				 rTemperatureInFahrenheit : REAL; 
+				  //bStartButton,
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+bStartButton             := 1; 
+
+iMotorSpeed               := 1; 
+
+rTemperatureSetpoint          := 1; 
+
+bStartButton     := 1; 
+
+// BAD COMMENT: just repeats the code
+rTemperatureInCelsius := (rTemperatureInFahrenheit - 32) * 5 / 9;  // convert Fahrenheit to Celsius
+
+
+// GOOD COMMENT: EXPLAINS WHY!
+// We need the Celsius value because our control logic and sensors work in metric units.
+rTemperatureInCelsius := (rTemperatureInFahrenheit - 32) * 5 / 9;  ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

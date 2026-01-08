@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="TankfillingSystem" Id="{f645ee50-4ca9-4e61-ba34-c2686d608923}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK TankfillingSystem
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	(* Inputs *)
+	iState       : Thankfillingenum := IDlLE;
+    bStart       : BOOL;
+    bStop        : BOOL;
+    bLowLevel    : BOOL;
+    bHighLevel   : BOOL;
+    bResetAlarm  : BOOL;
+
+    (* Outputs *)
+    bFillValve   : BOOL;
+    bDrainValve  : BOOL;
+    bAlarm       : BOOL;
+
+    (* Internal *)
+   
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+(* ===================== *)
+(* State Machine Logic   *)
+(* ===================== *)
+
+IF bStop THEN
+    iState := IDlLE;
+	bStart := FALSE;
+END_IF;
+
+ IF bLowLevel AND bHighLevel THEN (* Sensor fault *)
+            iState := FAULT;
+ END_IF
+
+CASE iState OF
+
+    IDlLE: (* IDLE *)
+        bFillValve := FALSE;
+        bDrainValve := FALSE;
+        bAlarm := FALSE;
+
+        IF bStart THEN
+                iState := FILLING;
+        END_IF
+
+    FILLING: (* FILLING *)
+        bFillValve := TRUE;
+        bDrainValve := FALSE;
+
+        IF bHighLevel THEN
+            bFillValve := FALSE;
+            iState := FULL;
+        END_IF
+
+       
+
+    FULL: (* FULL *)
+        bFillValve := FALSE;
+        bDrainValve := FALSE;
+
+        IF NOT bHighLevel THEN
+            iState := DRAINING;
+        END_IF
+
+    DRAINING: (* DRAINING *)
+        bFillValve := FALSE;
+        bDrainValve := TRUE;
+
+        IF bLowLevel THEN
+            bDrainValve := FALSE;
+            iState := IDlLE;
+        END_IF
+
+    FAULT: (* FAULT *)
+        bFillValve := FALSE;
+        bDrainValve := FALSE;
+        bAlarm := TRUE;
+		
+        IF bResetAlarm THEN 
+            bAlarm := FALSE;
+            iState := IDlLE;
+        END_IF
+
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

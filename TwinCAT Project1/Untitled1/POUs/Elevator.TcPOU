@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="Elevator" Id="{d231f3f7-c566-4bad-a7c7-d618a0a06ae7}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Elevator
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	ePreviousState : INT; 
+    
+  
+    tMove          : TON;
+    tDoor          : TON;
+	bCallFloor0 : BOOL; 
+	bSelect0 : BOOL; 
+	bCallFloor1 : BOOL; 
+	bCallFloor2 : BOOL; 
+	bSelect1 : BOOL; 
+	bSelect2 : BOOL; 
+	iCurrentFloor  : INT := 0;
+	iTargetFloor   : INT;
+	eState         : E_ElevatorState;
+	DoorisOpen : BOOL; 
+	berror: BOOL; 
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+(* 
+IF berror THEN
+	eState:= fault; 
+END_IF
+CASE eState OF
+
+    Idle:
+        IF bCallFloor0 OR bSelect0 THEN
+            iTargetFloor := 0;
+			bCallFloor0 :=0;  
+			bSelect0 := 0 ; 
+        ELSIF bCallFloor1 OR bSelect1 THEN
+            iTargetFloor := 1;
+			bCallFloor1 :=0;  
+			bSelect1 := 0 ; 
+        ELSIF bCallFloor2 OR bSelect2 THEN
+            iTargetFloor := 2;
+			bCallFloor2 :=0;  
+			bSelect2 := 0 ; 
+        END_IF;
+
+        IF iTargetFloor > iCurrentFloor THEN
+            eState := MovingUp;
+        ELSIF iTargetFloor < iCurrentFloor THEN
+            eState := MovingDown;
+        END_IF;
+
+    MovingUp:
+	tMove(IN := TRUE, PT := T#5S);
+        IF tMove.Q THEN
+            iCurrentFloor := iCurrentFloor + 1;
+            tMove(IN := FALSE);
+        END_IF;
+		IF iCurrentFloor = iTargetFloor THEN
+		    ePreviousState := eState ; 
+            eState := DoorControl; 
+        END_IF;
+
+    MovingDown:
+        tMove(IN := TRUE, PT := T#5S);
+        IF tMove.Q THEN
+            iCurrentFloor := iCurrentFloor - 1;
+            tMove(IN := FALSE);
+        END_IF;
+		IF iCurrentFloor = iTargetFloor THEN
+		    ePreviousState := eState ; 
+            eState := DoorControl;
+        END_IF;
+
+    DoorControl:
+	(* send command to open door here and wait that the door opens. Write true to the DoorisOpen variable *)
+			DoorisOpen := TRUE; 
+			IF DoorisOpen THEN 
+				tDoor(IN := TRUE, PT := T#5S);
+			END_IF
+		ePreviousState := eState ; 
+        IF tDoor.Q THEN
+			DoorisOpen := FALSE; 
+            tDoor(IN := FALSE);
+            eState := Idle;
+        END_IF;
+    Fault: 
+END_CASE;*)
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

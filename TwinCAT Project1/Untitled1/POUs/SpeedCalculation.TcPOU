@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="SpeedCalculation" Id="{dcae9820-37df-45ac-a433-645343f963bf}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK SpeedCalculation
+VAR_INPUT
+END_VAR
+
+VAR_OUTPUT
+END_VAR
+VAR
+rSpeed : REAL; 
+rDistance: REAL; 
+rTime : REAL; 
+
+bError : BOOL; 
+nErrorID : INT; 
+sErrorText : STRING; 
+
+
+END_VAR
+
+VAR RETAIN
+    iCounter : INT := 0;
+END_VAR
+
+
+VAR PERSISTENT
+    iTotalCycles : INT := 0;
+END_VAR
+
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+
+rSpeed := rDistance/rTime; 
+
+
+
+IF rTime <> 0 THEN // if rTime is not equal to zero
+	rSpeed := rDistance/rTime; 
+ELSE 
+	// Do not devide by rtime because it is zero
+END_IF]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

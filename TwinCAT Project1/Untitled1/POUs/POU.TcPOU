@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="POU" Id="{5b40bf56-4e25-49bf-87c8-7c010d85423e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK POU
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	CurrentState: MachineState;
+	Lamp: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF CurrentState = off THEN 
+	Lamp := FALSE; 
+ELSIF CurrentState = On THEN 
+	Lamp := TRUE; 
+ELSIF CurrentState = Error THEN 
+	//blink lamp
+END_IF
+	]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="PackagingLine" Id="{2bbcd1a2-2523-4c2f-99d4-fc1e217866fc}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK PackagingLine
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	eState : E_PackagingState := Idle;
+    bStart, bStop, bError : BOOL;
+    bSensor : BOOL;
+    iCount : INT := 0;
+    tSeal : TON;
+
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF bStop THEN
+	eState := Idle;
+	bStart := FALSE; 
+END_IF;
+
+IF berror THEN 
+	eState := error;
+	bStart := FALSE; 
+END_IF
+
+CASE eState OF
+	
+    Idle:
+        IF bStart THEN
+            eState := Moving;
+			bStop := FALSE; 
+        END_IF; 
+  
+    Moving:
+        IF bSensor THEN
+            eState := Sealing;
+		END_IF
+
+    Sealing:
+	    tSeal(IN := TRUE, PT := T#3S);
+        IF tSeal.Q THEN
+            iCount := iCount + 1;
+            eState := Moving;
+            tSeal(IN := FALSE);
+			bSensor:=FALSE; 
+        END_IF;
+    Error:
+	
+        // Handle jam or sensor fault
+END_CASE;
+]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

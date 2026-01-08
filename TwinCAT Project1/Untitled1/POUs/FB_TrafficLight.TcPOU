@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="FB_TrafficLight" Id="{4910b0d9-d5c3-4127-98b1-e36201d11750}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TrafficLight
+VAR_INPUT
+    tRedTime    : TIME;   // Red duration
+    tYellowTime : TIME;   // Yellow duration
+    tGreenTime  : TIME;   // Green duration
+END_VAR
+VAR_OUTPUT
+    actualLight : INT := 0; // light color at the present instant
+END_VAR
+VAR
+	bRed    : BOOL;
+    bYellow : BOOL;
+    bGreen  : BOOL;
+    eState : INT := 0;    // 0=Red, 1=Yellow, 2=Green
+    ton    : TON;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[CASE eState OF
+
+    0: // RED
+		bYellow := FALSE; 
+		bGreen  := FALSE;
+        bRed    := TRUE;
+		actualLight := 0; 
+		
+        ton(IN := TRUE, PT := tRedTime);
+        IF ton.Q THEN
+            ton(IN := FALSE);
+            eState := 1;
+        END_IF
+
+    1: // YELLOW
+         
+		bGreen  := FALSE;
+        bRed    := FALSE;
+		bYellow := TRUE;
+		actualLight := 1; 
+		
+        ton(IN := TRUE, PT := tYellowTime);
+        IF ton.Q THEN
+            ton(IN := FALSE);
+            eState := 2;
+        END_IF
+
+    2: // GREEN
+        bYellow := FALSE; 
+		bRed    := FALSE;
+		bGreen  := TRUE;
+		actualLight := 2; 
+        
+        ton(IN := TRUE, PT := tGreenTime);
+        IF ton.Q THEN
+            ton(IN := FALSE);
+            eState := 0;
+        END_IF
+
+END_CASE]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>

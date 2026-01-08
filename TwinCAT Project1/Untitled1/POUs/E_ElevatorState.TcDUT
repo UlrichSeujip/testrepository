@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="E_ElevatorState" Id="{eb632649-71c8-4fbc-ab50-572192c7ac77}">
+    <Declaration><![CDATA[//{attribute 'qualified_only'}
+//{attribute 'strict'}
+{attribute 'to_string'}
+TYPE E_ElevatorState :
+(
+	//Idle,
+    MovingUp,
+    MovingDown,
+    DoorControl
+	//Fault
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

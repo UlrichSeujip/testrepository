@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <DUT Name="MachineState" Id="{efb98ac1-2c38-42d6-8584-62264cb5e132}">
+    <Declaration><![CDATA[//{attribute 'qualified_only'}
+{attribute 'strict'}
+{attribute 'to_string'}
+TYPE MachineState :
+(
+	off   := 0, 
+	on    := 1
+	//error := 2
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

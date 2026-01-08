@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1">
+  <POU Name="LibrariesAndReusableCode" Id="{38099b21-d6f0-4ff4-bfb0-c8ab3f6f1202}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK LibrariesAndReusableCode
+VAR_INPUT
+	Number : REAL;
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	 
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// absolute value
+IF Number < 0 THEN 
+	Number := Number*(-1); 
+ELSE
+	Number := Number ; 
+END_IF
+
+Number := ABS(Number); ]]></ST>
+    </Implementation>
+  </POU>
+</TcPlcObject>
