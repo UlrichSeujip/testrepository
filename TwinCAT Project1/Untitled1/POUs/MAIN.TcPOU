@@ -4,7 +4,7 @@
     <Declaration><![CDATA[PROGRAM MAIN
 VAR
 	LibrariesAndReusableCode :LibrariesAndReusableCode; 
-	pou : pou; 
+	pou1 : pou; 
 CurrentState : INT; 
 Lamp : BOOL; 
 variable : BOOL ; 
@@ -31,7 +31,7 @@ END_IF
 
 Elevator(); 
 
-POU(); 
+POU1(); 
 LibrariesAndReusableCode(Number := -5);
 
 // Main Road Code Implementation
