@@ -23,6 +23,7 @@ VAR
 	temp                 : REAL; 
 	
 	CalculateAverageSensorValue                  : ton;  
+	start : int; 
 	
 	ConvertFahrenheitTemperatureToCelsius              :Ton; 
 	
@@ -35,7 +36,7 @@ VAR
 END_VAR
 ]]></Declaration>
     <Implementation>
-      <ST><![CDATA[
+      <ST><![CDATA[// test 
 
 bStartButton             := 1; 
 
